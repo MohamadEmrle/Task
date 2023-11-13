@@ -1,11 +1,14 @@
 @extends('admin.layout.main')
+@section('style')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
     @if (Session::has('store'))
         <div class="row mr-2 ml-2">
             <label class="alert alert-success">{{ Session::get('store') }}</label>
         </div>
     @endif
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    <button style="margin-bottom: 10px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         create
     </button>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -19,7 +22,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.category.store') }}" method="POST">
+                    <form action="" id="categor_form" method="">
                         @csrf
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
@@ -36,12 +39,10 @@
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
-                            <input type="submit" class="btn btn-success" value="save" class="form-control">
+                            <button id="caegory_add" class="btn btn-success" class="form-control">save</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
                 </div>
             </div>
         </div>
@@ -56,21 +57,55 @@
             </tr>
         </thead>
     </table>
-    @section('scripts')
-        <script src="text/javascript">
-            $(document).ready(function() {
-                var table = $('#categories_table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: "{{ route('admin.category.index') }}",
-                    columns: [
-                        {data: 'id',name: 'id'},
-                        {data: 'name',name: 'name'},
-                        {data: 'description',name: 'description'},
-                        {data: 'action',name: 'action',orderable: false,searchable: false}
-                    ]
-                })
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            var table = $('#categories_table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.category.index') }}",
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
             })
-        </script>
-    @endsection
+        })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).on('click', '#caegory_add', function(e) {
+            e.preventDefault();
+            var formdata = new FormData(this);
+            $.ajax({
+                type: 'post',
+                url: "{{ route('admin.category.store') }}",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    var oTable = $('#categories_table').DataTable();
+                    oTable.draw(true);
+                },
+
+            });
+        });
+    </script>
+@endsection
 @endsection

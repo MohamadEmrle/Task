@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\categoryDataTable;
+use App\DataTables\categoryDataTableEditor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\storeRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
+
     public function categories()
     {
         return view('admin.pages.categories.index');
@@ -17,15 +20,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Category::all();
-            return datatables()->of(Category::query()->get())
-                ->addIndexColumn()
-                ->addColumn('action',function($row) {
-                    $actionBtn = '<a href="javascript::void(0)"class="edit btn btn-success btn-sm">Edit</a>
-                                <a href="javascript::void(0)"class="btn btn-danger btn-sm">Delete</a>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])->make();
+            return datatables()->of(Category::select('*'))
+            ->addColumn('action','admin.pages.categories.button')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
         }
         return view('admin.pages.categories.index');
     }

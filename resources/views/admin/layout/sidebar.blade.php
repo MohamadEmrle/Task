@@ -31,11 +31,16 @@
 
                         <p>
                             Categories
-                            <span class="badge badge-info right">{{ App\Models\Category::count() }}</span>
                         </p>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.images') }}" class="nav-link">
+                        <p>
+                            Images
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,5 +38,17 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'ch
     Route::get('/categories' ,[CategoryController::class,'categories'])->name('admin.categories');
     Route::get('/category/index' ,[CategoryController::class,'index'])->name('admin.category.index');
     Route::post('/category/store' ,[CategoryController::class,'store'])->name('admin.category.store');
+    Route::post('/category/edit/{id}' ,[CategoryController::class,'edit'])->name('admin.category.edit');
+    Route::get('/category/delete/{id}' ,[CategoryController::class,'delete'])->name('admin.category.delete');
 });
 // End Category Controller
+
+// Start Image Controller
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+    Route::get('/images' ,[ImageController::class,'images'])->name('admin.images');
+    Route::get('/image/index' ,[ImageController::class,'index'])->name('admin.image.index');
+    Route::post('/image/store' ,[ImageController::class,'store'])->name('admin.image.store');
+    Route::get('/image/delete/{id}' ,[ImageController::class,'delete'])->name('admin.image.delete');
+
+});
+// End Image Controller

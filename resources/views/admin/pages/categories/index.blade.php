@@ -47,6 +47,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <form id="categor_form_edit" action="" method="">
+                        @csrf
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Name</label>
+                            <input type="text" name="name" id="name" class="form-control"
+                                placeholder="Enter The Category Name">
+                        </div>
+                        @error('name')
+                            <h4 class="alert alert-danger">{{ $message }}</h4>
+                        @enderror
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Description</label>
+                            <textarea name="description"  id="description" class="form-control" placeholder="Enter The Category Description"></textarea>
+                        </div>
+                        @error('description')
+                            <h4 class="alert alert-danger">{{ $message }}</h4>
+                        @enderror
+                        <div class="form-group">
+                            <button id="caegory_update" class="btn btn-success" class="form-control">save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <table id="categories_table" class="table table-bordered data-table">
         <thead>
             <tr>
@@ -64,6 +100,9 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('admin.category.index') }}",
+                dataType: 'json',
+                dataSrc: 'data',
+                serverSide: true,
                 columns: [{
                         data: 'id',
                         name: 'id'
@@ -77,10 +116,14 @@
                         name: 'description'
                     },
                     {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                        title: 'Action',
+                        render: function(data, type, row) {
+                            return '<a id="category_edit" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-id="' +
+                                row.id +
+                                '">Edit</a> <a id="category_delete" class="btn btn-danger" data-id="' +
+                                row.id + '">Delete</a>';
+
+                        }
                     }
                 ]
             })
@@ -91,7 +134,8 @@
     <script>
         $(document).on('click', '#caegory_add', function(e) {
             e.preventDefault();
-            var formdata = new FormData(this);
+            var form = document.getElementById('categor_form');
+            var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
                 url: "{{ route('admin.category.store') }}",
@@ -100,10 +144,45 @@
                 contentType: false,
                 cache: false,
                 success: (data) => {
-                    var oTable = $('#categories_table').DataTable();
-                    oTable.draw(true);
+                    var oTable = $("#categories_table").DataTable().ajax.reload();
+                    oTable.ajax.reload();
                 },
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '#category_edit', function(e) {
+            var categoryId = $(this).data('id');
+            $.ajax({
+                url: '{{ url('admin/category/edit') }}/' + categoryId,
+                type: 'GET',
+                success: function(response) {
+                    $('#name').val(response.data.name);
+                    $('#description').val(response.data.description);
 
+                    // Open modal
+                    $('#editModal').modal('show');
+                },
+                error: function(error) {
+                    // Handle error
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '#category_delete', function(e) {
+            var categoryId = $(this).data('id');
+            $.ajax({
+                url: '{{ url('admin/category/delete') }}/' + categoryId,
+                type: 'get',
+                success: function(response) {
+                    if (response.success) {
+                        $('#categories_table').DataTable().row($(this).closest('tr')).remove().draw();
+                        alert('Category deleted successfully.');
+                    } else {
+                        alert('Error deleting category.');
+                    }
+                }
             });
         });
     </script>

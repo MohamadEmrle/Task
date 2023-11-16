@@ -1,7 +1,4 @@
 @extends('admin.layout.main')
-@section('style')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
 @section('content')
     @if (Session::has('store'))
         <div class="row mr-2 ml-2">
@@ -60,9 +57,10 @@
                 <div class="modal-body" id="modal-body">
                     <form id="categor_form_edit" action="" method="">
                         @csrf
+                        <input type="hidden" name="id" id="category_id" class="form-control">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
-                            <input type="text" name="name" id="name" class="form-control"
+                            <input type="text" name="name" id="category_name" class="form-control"
                                 placeholder="Enter The Category Name">
                         </div>
                         @error('name')
@@ -70,13 +68,14 @@
                         @enderror
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Description</label>
-                            <textarea name="description"  id="description" class="form-control" placeholder="Enter The Category Description"></textarea>
+                            <textarea name="description" id="category_description" class="form-control"
+                                placeholder="Enter The Category Description"></textarea>
                         </div>
                         @error('description')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
-                            <button id="caegory_update" class="btn btn-success" class="form-control">save</button>
+                            <button id="caegory_update" class="btn btn-success" class="form-control" data-id="category_id">update</button>
                         </div>
                     </form>
                 </div>
@@ -94,6 +93,8 @@
         </thead>
     </table>
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
             var table = $('#categories_table').DataTable({
@@ -129,8 +130,7 @@
             })
         })
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+
     <script>
         $(document).on('click', '#caegory_add', function(e) {
             e.preventDefault();
@@ -155,19 +155,35 @@
             var categoryId = $(this).data('id');
             $.ajax({
                 url: '{{ url('admin/category/edit') }}/' + categoryId,
-                type: 'GET',
-                success: function(response) {
-                    $('#name').val(response.data.name);
-                    $('#description').val(response.data.description);
-
-                    // Open modal
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
                     $('#editModal').modal('show');
+                    $('#category_id').val(data.id);
+                    $('#category_name').val(data.name);
+                    $('#category_description').val(data.description);
                 },
-                error: function(error) {
-                    // Handle error
-                }
             });
         });
+    </script>
+    <script>
+        $(document).on('click', '#caegory_update', function(e) {
+            e.preventDefault();
+            var categoryId = $(this).data('category_id');
+            var form = document.getElementById('categor_form_edit');
+            var formdata = new FormData(form);
+            $.ajax({
+            type: 'POST',
+            url: '{{ url('admin/category/update') }}',
+            data:formdata,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: (data) => {
+                $("#categories_table").DataTable().ajax.reload();
+            },
+        });
+    });
     </script>
     <script>
         $(document).on('click', '#category_delete', function(e) {

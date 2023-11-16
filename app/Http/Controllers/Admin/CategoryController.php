@@ -6,6 +6,7 @@ use App\DataTables\categoryDataTable;
 use App\DataTables\categoryDataTableEditor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\storeRequest;
+use App\Http\Requests\Category\updateRequest;
 use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,9 +40,16 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $record = Category::find($id);
-        return response()->json([
-            'data' => $record
+        return response()->json($record);
+    }
+    public function update(updateRequest $request)
+    {
+        $record = Category::where('id',$request->id)->first();
+        $record->update([
+            'name'                  => $request->name ?? $record->name,
+            'description'           => $request->description ?? $record->description,
         ]);
+        return redirect()->route('admin.category.index')->with(['update'=>'Update Category Successfully']);
     }
     public function delete($id)
     {

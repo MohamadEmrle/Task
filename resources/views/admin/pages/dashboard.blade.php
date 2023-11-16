@@ -31,7 +31,7 @@
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3>53</h3>
+                                <h3>{{ App\Models\Image::count() }}</h3>
 
                                 <p>Images</p>
                             </div>

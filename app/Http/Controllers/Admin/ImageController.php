@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Image\storeRequest;
+use App\Http\Requests\Image\updateRequest;
 use App\Http\Traits\imageTrait;
 use App\Models\Category;
 use App\Models\Image;
@@ -41,6 +42,27 @@ class ImageController extends Controller
         $data['image'] = $this->saveImage($request->image,'dist/images/'.$request->category_id);
         Image::create($data);
         return redirect()->route('admin.image.index')->with(['store'=>'Store Image Successfully']);
+    }
+    public function edit($id)
+    {
+        $record = Image::find($id);
+        return response()->json($record);
+    }
+    public function update(updateRequest $request)
+    {
+        $record = Image::whereHas('category')->where('id',$request->id)->first();
+        $data = $request->user();
+        if(request()->hasFile('image')) {
+            File::delete('dist/images/'.$record->category_id.'/'.$record->image);
+        }
+        if(isset($request->image)) {
+            $data['image'] = $this->saveImage($request->image,'dist/images/'.$request->category_id);
+        }
+        $record->update([
+            'category_id'         => $request->category_id ?? $record->category_id,
+            'image'               => $data['image'] ?? $record->image,
+        ]);
+        return redirect()->route('admin.image.index')->with(['update'=>'Update Image Successfully']);
     }
     public function delete($id)
     {

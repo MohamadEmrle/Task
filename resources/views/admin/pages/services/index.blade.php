@@ -1,4 +1,7 @@
 @extends('admin.layout.main')
+@section('style')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
     @if (Session::has('store'))
         <div class="row mr-2 ml-2">
@@ -19,31 +22,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="categor_form" method="">
+                    <form action="" id="service_form" method="">
                         @csrf
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter The Category Name">
+                            <input type="text" name="name" class="form-control" placeholder="Enter The Service Name">
                         </div>
                         @error('name')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Description</label>
-                            <textarea name="description" class="form-control" placeholder="Enter The Category Description"></textarea>
+                            <textarea name="description" class="form-control" placeholder="Enter The Service Description"></textarea>
                         </div>
                         @error('description')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
+
                         <div class="form-group">
-                            <label for="exampleFormControlFile1">Image</label>
-                            <input type="file" name="image" class="form-control">
-                        </div>
-                        @error('description')
-                            <h4 class="alert alert-danger">{{ $message }}</h4>
-                        @enderror
-                        <div class="form-group">
-                            <button id="caegory_add" class="btn btn-success" class="form-control">save</button>
+                            <button id="service_add" class="btn btn-success" class="form-control">save</button>
                         </div>
                     </form>
 
@@ -51,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    <div class="modal fade" id="editModale" tabindex="-1" role="dialog" aria-labelledby="editModaleLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -62,12 +59,12 @@
                     </button>
                 </div>
                 <div class="modal-body" id="modal-body">
-                    <form id="categor_form_edit" action="" method="">
+                    <form id="service_form_edit" action="" method="">
                         @csrf
-                        <input type="hidden" name="id" id="category_id" class="form-control">
+                        <input type="hidden" name="id" id="service_id" class="form-control">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
-                            <input type="text" name="name" id="category_name" class="form-control"
+                            <input type="text" name="name" id="service_name" class="form-control"
                                 placeholder="Enter The Category Name">
                         </div>
                         @error('name')
@@ -75,35 +72,27 @@
                         @enderror
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Description</label>
-                            <textarea name="description" id="category_description" class="form-control"
+                            <textarea name="description" id="service_description" class="form-control"
                                 placeholder="Enter The Category Description"></textarea>
                         </div>
                         @error('description')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
+
                         <div class="form-group">
-                            <label for="exampleFormControlFile1">Description</label>
-                            <textarea name="description" id="category_description" class="form-control"
-                                placeholder="Enter The Category Description"></textarea>
-                        </div>
-                        @error('description')
-                            <h4 class="alert alert-danger">{{ $message }}</h4>
-                        @enderror
-                        <div class="form-group">
-                            <button id="caegory_update" class="btn btn-success" class="form-control" data-id="category_id">update</button>
+                            <button id="service_update" class="btn btn-success" class="form-control" data-id="service_id">update</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <table id="categories_table" class="table table-bordered data-table">
+    <table id="services_table" class="table table-bordered data-table">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Image</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -113,10 +102,10 @@
     <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            var table = $('#categories_table').DataTable({
+            var table = $('#services_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.category.index') }}",
+                ajax: "{{ route('admin.service.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -133,17 +122,11 @@
                         name: 'description'
                     },
                     {
-                        data: 'image',
-                        render: function(image) {
-                            return '<img src="' + image + '" width="150" height="50">';
-                        }
-                    },
-                    {
                         title: 'Action',
                         render: function(data, type, row) {
-                            return '<a id="category_edit" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-id="' +
+                            return '<a id="service_edit" class="btn btn-info" data-toggle="modal" data-target="#editModale" data-id="' +
                                 row.id +
-                                '">Edit</a> <a id="category_delete" class="btn btn-danger" data-id="' +
+                                '">Edit</a> <a id="service_delete" class="btn btn-danger" data-id="' +
                                 row.id + '">Delete</a>';
 
                         }
@@ -154,71 +137,71 @@
     </script>
 
     <script>
-        $(document).on('click', '#caegory_add', function(e) {
+        $(document).on('click', '#service_add', function(e) {
             e.preventDefault();
-            var form = document.getElementById('categor_form');
+            var form = document.getElementById('service_form');
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.category.store') }}",
+                url: "{{ route('admin.service.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
                 cache: false,
                 success: (data) => {
-                    var oTable = $("#categories_table").DataTable().ajax.reload();
+                    var oTable = $("#services_table").DataTable().ajax.reload();
                     oTable.ajax.reload();
                 },
             });
         });
     </script>
     <script>
-        $(document).on('click', '#category_edit', function(e) {
-            var categoryId = $(this).data('id');
+        $(document).on('click', '#service_edit', function(e) {
+            var serviceId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/category/edit') }}/' + categoryId,
+                url: '{{ url('admin/service/edit') }}/' + serviceId,
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {
-                    $('#editModal').modal('show');
-                    $('#category_id').val(data.id);
-                    $('#category_name').val(data.name);
-                    $('#category_description').val(data.description);
+                    $('#editModale').modal('show');
+                    $('#service_name').val(data.name);
+                    $('#service_description').val(data.description);
+                    $('#service_id').val(data.service_id);
                 },
             });
         });
     </script>
     <script>
-        $(document).on('click', '#caegory_update', function(e) {
+        $(document).on('click', '#service_update', function(e) {
             e.preventDefault();
-            var categoryId = $(this).data('category_id');
-            var form = document.getElementById('categor_form_edit');
+            var serviceeId = $(this).data('service_id');
+            var form = document.getElementById('service_form_edit');
             var formdata = new FormData(form);
             $.ajax({
-            type: 'POST',
-            url: '{{ url('admin/category/update') }}',
+            type: 'post',
+            url: '{{ url('admin/service/update') }}',
             data:formdata,
             processData: false,
             contentType: false,
             cache: false,
             success: (data) => {
-                $("#categories_table").DataTable().ajax.reload();
+                $("#services_table").DataTable().ajax.reload();
             },
         });
     });
     </script>
     <script>
-        $(document).on('click', '#category_delete', function(e) {
-            var categoryId = $(this).data('id');
+        $(document).on('click', '#service_delete', function(e) {
+            var serviceId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/category/delete') }}/' + categoryId,
+                url: '{{ url('admin/service/delete') }}/' + serviceId,
                 type: 'get',
                 success: function(response) {
                     if (response.success) {
-                        $('#categories_table').DataTable().row($(this).closest('tr')).remove().draw();
-                        alert('Category deleted successfully.');
+                        $('#services_table').DataTable().row($(this).closest('tr')).remove().draw();
+                        alert('Service deleted successfully.');
                     } else {
-                        alert('Error deleting category.');
+                        alert('Error deleting Service.');
                     }
                 }
             });

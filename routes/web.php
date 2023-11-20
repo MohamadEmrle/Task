@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +24,7 @@ Route::get('/', function () {
 });
 // Start Login Controller
 Route::group(['namespace' => 'Admin' ,'prefix' => 'admin'],function(){
-    Route::get('login',[LoginController::class,'index'])->name('admin.index');
+    Route::get('index',[LoginController::class,'index'])->name('admin.index');
     Route::post('store',[LoginController::class,'store'])->name('admin.store');
 });
 // End Login Controller
@@ -49,9 +51,23 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'ch
     Route::get('/images' ,[ImageController::class,'images'])->name('admin.images');
     Route::get('/image/index' ,[ImageController::class,'index'])->name('admin.image.index');
     Route::post('/image/store' ,[ImageController::class,'store'])->name('admin.image.store');
-    Route::get('/image/edit/{id}' ,[ImageController::class,'edit'])->name('admin.category.edit');
+    Route::get('/image/edit/{id}' ,[ImageController::class,'edit'])->name('admin.image.edit');
     Route::post('/image/update',[ImageController::class, 'update'])->name('admin.image.update');
     Route::get('/image/delete/{id}' ,[ImageController::class,'delete'])->name('admin.image.delete');
 
 });
 // End Image Controller
+
+// Start Service Controller
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+    Route::get('/services' ,[ServiceController::class,'index'])->name('admin.services');
+    Route::get('/service/create' ,[ServiceController::class,'create'])->name('admin.service.create');
+    Route::post('/service/store' ,[ServiceController::class,'store'])->name('admin.service.store');
+    Route::get('/service/edit/{id}' ,[ServiceController::class,'edit'])->name('admin.service.edit');
+    Route::post('/service/update',[ServiceController::class, 'update'])->name('admin.service.update');
+    Route::get('/service/delete/{id}' ,[ServiceController::class,'destroy'])->name('admin.service.delete');
+
+
+});
+// End Image Controller
+

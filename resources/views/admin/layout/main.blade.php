@@ -20,3 +20,4 @@
     @include('admin.layout.script')
     @yield('scripts')
 </body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +24,6 @@ class storeRequest extends FormRequest
         return [
             'name'        => 'required|string',
             'description' => 'required|string',
-            'image'       => 'required|mimes:png,jpg',
         ];
     }
 }

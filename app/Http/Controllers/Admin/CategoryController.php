@@ -7,6 +7,7 @@ use App\DataTables\categoryDataTableEditor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\storeRequest;
 use App\Http\Requests\Category\updateRequest;
+use App\Http\Traits\imageTrait;
 use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
-
+    use imageTrait;
     public function categories()
     {
         return view('admin.pages.categories.index');
@@ -24,7 +25,10 @@ class CategoryController extends Controller
     {
         if($request->ajax()) {
             return datatables()->of(Category::select('*'))
-            // ->addColumn('action','admin.pages.categories.button')
+            ->addColumn('image', function($image) {
+                $imagePath = '../dist/images/categories/' . $image->image  ;
+                return $imagePath;
+            })
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -33,7 +37,8 @@ class CategoryController extends Controller
     }
     public function store(storeRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
+        $data['image'] = $this->saveImage($request->image,'dist/images/categories');
         Category::create($data);
         return redirect()->route('admin.category.index')->with(['store'=>'Store Category Successfully']);
     }

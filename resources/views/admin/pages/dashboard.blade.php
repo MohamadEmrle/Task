@@ -36,14 +36,24 @@
                                 <p>Images</p>
                             </div>
 
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="{{ route('admin.images') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ App\Models\Service::count() }}</h3>
 
+                                <p>Services</p>
+                            </div>
+
+                            <a href="{{ route('admin.services') }}" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
                 </div>
-
-
             </div>
         </section>
     </div>

@@ -19,6 +19,6 @@ class DashboardController extends Controller
     {
         Session::flush();
         Auth::logout();
-        return redirect()->route('admin.index');
+        return redirect()->route('login');
     }
 }

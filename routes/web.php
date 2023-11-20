@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Site\SiteController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,23 +21,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.pages.login');
+    $categories = Category::all();
+    return view('site.pages.index',compact('categories'));
 });
-// Start Login Controller
-Route::group(['namespace' => 'Admin' ,'prefix' => 'admin'],function(){
-    Route::get('index',[LoginController::class,'index'])->name('admin.index');
-    Route::post('store',[LoginController::class,'store'])->name('admin.store');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// End Login Controller
+
+require __DIR__.'/auth.php';
+
 // Start Dashboard Controller
-Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
     Route::get('/dashboard' ,[DashboardController::class,'index'])->name('admin.dashboard');
     Route::get('/logout' ,[DashboardController::class,'logout'])->name('admin.logout');
 });
 // End Dashboard Controller
 
 // Start Category Controller
-Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
     Route::get('/categories' ,[CategoryController::class,'categories'])->name('admin.categories');
     Route::get('/category/index' ,[CategoryController::class,'index'])->name('admin.category.index');
     Route::post('/category/store' ,[CategoryController::class,'store'])->name('admin.category.store');
@@ -47,7 +55,7 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'ch
 // End Category Controller
 
 // Start Image Controller
-Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
     Route::get('/images' ,[ImageController::class,'images'])->name('admin.images');
     Route::get('/image/index' ,[ImageController::class,'index'])->name('admin.image.index');
     Route::post('/image/store' ,[ImageController::class,'store'])->name('admin.image.store');
@@ -59,7 +67,7 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'ch
 // End Image Controller
 
 // Start Service Controller
-Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'check'],function(){
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
     Route::get('/services' ,[ServiceController::class,'index'])->name('admin.services');
     Route::get('/service/create' ,[ServiceController::class,'create'])->name('admin.service.create');
     Route::post('/service/store' ,[ServiceController::class,'store'])->name('admin.service.store');

@@ -12,6 +12,6 @@ class Category extends Model
     protected $guarded = [];
     public function images()
     {
-        return $this->hasMany(Image::class,'categor_id');
+        return $this->hasMany(Image::class,'category_id');
     }
 }

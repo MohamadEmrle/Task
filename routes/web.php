@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\IdentityController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -67,6 +70,7 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'au
 // End Image Controller
 
 // Start Service Controller
+
 Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
     Route::get('/services' ,[ServiceController::class,'index'])->name('admin.services');
     Route::get('/service/create' ,[ServiceController::class,'create'])->name('admin.service.create');
@@ -77,5 +81,46 @@ Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'au
 
 
 });
-// End Image Controller
+// End Service Controller
 
+// Start Content Controller
+
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
+    Route::get('/contents' ,[ContentController::class,'index'])->name('admin.contents');
+    Route::get('/content/create' ,[ContentController::class,'create'])->name('admin.content.create');
+    Route::post('/content/store' ,[ContentController::class,'store'])->name('admin.content.store');
+    Route::get('/content/edit/{id}' ,[ContentController::class,'edit'])->name('admin.content.edit');
+    Route::post('/content/update',[ContentController::class, 'update'])->name('admin.content.update');
+    Route::get('/content/delete/{id}' ,[ContentController::class,'destroy'])->name('admin.content.delete');
+
+
+});
+// End Content Controller
+
+// Start Customer Controller
+
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
+    Route::get('/customers' ,[CustomerController::class,'index'])->name('admin.customers');
+    Route::get('/customer/create' ,[CustomerController::class,'create'])->name('admin.customer.create');
+    Route::post('/customer/store' ,[CustomerController::class,'store'])->name('admin.customer.store');
+    Route::get('/customer/edit/{id}' ,[CustomerController::class,'edit'])->name('admin.customer.edit');
+    Route::post('/customer/update',[CustomerController::class, 'update'])->name('admin.customer.update');
+    Route::get('/customer/delete/{id}' ,[CustomerController::class,'destroy'])->name('admin.customer.delete');
+
+
+});
+// End Customer Controller
+
+// Start Identities Controller
+
+Route::group(['namespace' => 'Admin' , 'prefix' => 'admin' , 'middleware' => 'auth'],function(){
+    Route::get('/identities' ,[IdentityController::class,'index'])->name('admin.identities');
+    Route::get('/identitie/create' ,[IdentityController::class,'create'])->name('admin.identitie.create');
+    Route::post('/identitie/store' ,[IdentityController::class,'store'])->name('admin.identitie.store');
+    Route::get('/identitie/edit/{id}' ,[IdentityController::class,'edit'])->name('admin.identitie.edit');
+    Route::post('/identitie/update',[IdentityController::class, 'update'])->name('admin.identitie.update');
+    Route::get('/identitie/delete/{id}' ,[IdentityController::class,'destroy'])->name('admin.identitie.delete');
+
+
+});
+// End Identities Controller

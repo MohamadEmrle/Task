@@ -33,6 +33,7 @@ body {
     background: #f1f1f1;
     color: #212121;
     line-height: 1.6em;
+    background-image: '../../../../public/site/images/1.jpg'
 }
 
 h1 {
@@ -123,6 +124,7 @@ a, input, select, textarea, button, a:after, .btn:after, .owl-carousel-clients .
     -moz-transition: all 0.4s ease-in-out;
     -ms-transition: all 0.4s ease-in-out;
     -o-transition: all 0.4s ease-in-out;
+
 }
 
 p.clearfix {
@@ -360,17 +362,6 @@ footer a:hover {
     opacity: 0.5;
 }
 
-.main-content {
-    padding: 150px 0 60px;
-    position: relative;
-    z-index: 1000;
-    color: #fff;
-}
-
-.main-content p {
-    font-size: 16px;
-    margin-bottom: 15px;
-}
 
 .main-heading {
     color: #fff;
@@ -379,20 +370,30 @@ footer a:hover {
 }
 
 h3.main-heading {
-    margin: 10px 0 20px;
+    text-align: center;
 }
-
+.main-content {
+    background-image: url(../../site/images/2.jpg);
+}
+hr {
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+}
 .main-heading:after {
     content: '';
     width: 30px;
     height: 1px;
-    background: #fff;
+    background: black;
     display: block;
     margin: 10px auto 0;
 }
-
+#servuces {
+    color: #000;
+}
 .owl-carousel-clients .item {
     padding: 0 15px;
+
 }
 
 .owl-carousel-clients .item img {
@@ -406,7 +407,7 @@ h3.main-heading {
 }
 
 .border-bottom {
-    border-bottom: 1px solid rgba(255,255,255,0.3);
+
     padding-bottom: 10px;
 }
 
@@ -420,7 +421,9 @@ h3.main-heading {
     display: block;
     margin: 0 auto;
 }
-
+#item {
+    padding-bottom: 10px;
+}
 .img-holder img {
     width: 100%;
 }
@@ -438,7 +441,10 @@ h3.main-heading {
     background: rgba(0,0,0,0.65);
     text-align: center;
 }
-
+.hr {
+    height: 1.5px;
+    background-color: black;
+}
 .img-holder .hover-content h1 {
     font-size: 18px;
     margin: 0;

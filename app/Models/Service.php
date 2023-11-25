@@ -10,4 +10,8 @@ class Service extends Model
     use HasFactory;
     protected $table = 'services';
     protected $guarded = [];
+    public function contents()
+    {
+        return $this->hasMany(Content::class,'service_id');
+    }
 }

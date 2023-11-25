@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +15,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->bigInteger('id')->autoIncrement();
             $table->string('image');
-            $table->bigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreignIdFor(Category::class,'category_id');
             $table->timestamps();
         });
     }

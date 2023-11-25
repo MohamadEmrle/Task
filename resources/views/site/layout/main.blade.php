@@ -8,10 +8,13 @@
     <div id="owl-demo" class="owl-carousel owl-theme">
         @yield('site_content')
     </div>
-
-    <div class="navbar-fixed-bottom text-center">
-        @include('site.layout.footer')
+    <div class="main-content">
+        <div class="container">
+            <br><br><br><br>
+            @yield('site')
+        </div>
     </div>
+
     @include('site.layout.script')
     @yield('scripts')
 </body>

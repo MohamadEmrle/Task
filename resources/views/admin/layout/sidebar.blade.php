@@ -48,6 +48,27 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.contents') }}" class="nav-link">
+                        <p>
+                            Contents
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.customers') }}" class="nav-link">
+                        <p>
+                            Customers
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.identities') }}" class="nav-link">
+                        <p>
+                            Identities
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

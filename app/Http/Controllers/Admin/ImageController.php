@@ -24,7 +24,7 @@ class ImageController extends Controller
         if($request->ajax()) {
             return datatables()->of(Image::whereHas('category')->get())
             ->addColumn('image', function($image) {
-                $imagePath = '../dist/images/' . $image->category->id . '/' . $image->image;
+                $imagePath = '../storage/images/categories/' . $image->category->id . '/' . $image->image;
                 return $imagePath;
             })
             ->addColumn('CategoryName', function($image) {
@@ -38,8 +38,8 @@ class ImageController extends Controller
     }
     public function store(storeRequest $request)
     {
-        $data = $request->all();
-        $data['image'] = $this->saveImage($request->image,'dist/images/'.$request->category_id);
+        $data = $request->validated();
+        $data['image'] = $this->saveImage($request->image,'storage/images/categories/'.$request->category_id);
         Image::create($data);
         return redirect()->route('admin.image.index')->with(['store'=>'Store Image Successfully']);
     }
@@ -53,10 +53,10 @@ class ImageController extends Controller
         $record = Image::whereHas('category')->where('id',$request->id)->first();
         $data = $request->user();
         if(request()->hasFile('image')) {
-            File::delete('dist/images/'.$record->category_id.'/'.$record->image);
+            File::delete('storage/images/categories/'.$record->category_id.'/'.$record->image);
         }
         if(isset($request->image)) {
-            $data['image'] = $this->saveImage($request->image,'dist/images/'.$request->category_id);
+            $data['image'] = $this->saveImage($request->image,'storage/images/categories/'.$request->category_id);
         }
         $record->update([
             'category_id'         => $request->category_id ?? $record->category_id,
@@ -67,7 +67,7 @@ class ImageController extends Controller
     public function delete($id)
     {
         $imageId = Image::find($id);
-        $path = 'dist/images/'.$imageId->category_id.'/'.$imageId->image;
+        $path = 'storage/images/categories/'.$imageId->category_id.'/'.$imageId->image;
         if(File::exists($path)) {
             File::delete($path);
         }

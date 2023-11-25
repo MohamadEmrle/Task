@@ -24,6 +24,7 @@ class updateRequest extends FormRequest
         return [
             'name'        => 'nullable|string',
             'description' => 'nullable|string',
+            'image'       => 'nullable|mimes:png,jpg',
         ];
     }
 }

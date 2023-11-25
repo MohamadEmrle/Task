@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="categor_form" method="">
+                    <form action="" id="categor_form" method="" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
@@ -39,7 +39,7 @@
                             <label for="exampleFormControlFile1">Image</label>
                             <input type="file" name="image" class="form-control">
                         </div>
-                        @error('description')
+                        @error('image')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
@@ -82,11 +82,10 @@
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
-                            <label for="exampleFormControlFile1">Description</label>
-                            <textarea name="description" id="category_description" class="form-control"
-                                placeholder="Enter The Category Description"></textarea>
+                            <label for="exampleFormControlFile1">Image</label>
+                            <input type="file" name="image" id="category_image" class="form-control">
                         </div>
-                        @error('description')
+                        @error('image')
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
@@ -134,8 +133,8 @@
                     },
                     {
                         data: 'image',
-                        render: function(image) {
-                            return '<img src="' + image + '" width="150" height="50">';
+                        render: function(imagePath) {
+                            return '<img src="' + imagePath + '" width="150" height="50">';
                         }
                     },
                     {
@@ -184,6 +183,7 @@
                     $('#category_id').val(data.id);
                     $('#category_name').val(data.name);
                     $('#category_description').val(data.description);
+                    $('#category_image').val(data.image);
                 },
             });
         });

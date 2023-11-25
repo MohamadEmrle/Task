@@ -166,7 +166,7 @@
                     $('#editModale').modal('show');
                     $('#service_name').val(data.name);
                     $('#service_description').val(data.description);
-                    $('#service_id').val(data.service_id);
+                    $('#service_id').val(data.id);
                 },
             });
         });
@@ -174,7 +174,7 @@
     <script>
         $(document).on('click', '#service_update', function(e) {
             e.preventDefault();
-            var serviceeId = $(this).data('service_id');
+            var serviceeId = $(this).data('id');
             var form = document.getElementById('service_form_edit');
             var formdata = new FormData(form);
             $.ajax({

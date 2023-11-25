@@ -1,4 +1,4 @@
-<footer class="navbar-fixed-bottom text-center">
+<footer class="navbar-fixed-bottom">
     <div class="container">
 
         <p>جميع الحقوق محفوظة لمؤسسة صانع الصورة للتجارة  &copy; 2005-2015 </p>

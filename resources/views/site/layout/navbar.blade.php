@@ -11,16 +11,16 @@
 
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right text-align-left">
-                    <li class="active"><a href="index.html">الرئيسية</a></li>
-                    <li><a href="about.html">من نحن</a></li>
-                    <li><a href="services.html">خدماتنا</a></li>
+                    <li class="active"><a href="{{ route('site.index') }}">الرئيسية</a></li>
+                    <li><a href="{{ route('site.abouts') }}">من نحن</a></li>
+                    <li><a href="{{ route('site.index') }}">خدماتنا</a></li>
                 </ul>
 
                 <a href="index.html" class="navbar-brand hidden-xs text-center"><img src="{{ asset('site/images/logo.png') }}" alt="LOGO"></a>
 
                 <ul class="nav navbar-nav navbar-left text-align-right">
-                    <li><a href="gallery.html">معرض الصور</a></li>
-                    <li><a href="contact.html">اتصل بنا</a></li>
+                    <li><a href="{{ route('site.categories') }}">معرض الصور</a></li>
+                    <li><a href="{{ route('site.contact') }}">اتصل بنا</a></li>
                     <li><a href="#">English</a></li>
                 </ul>
             </div>

@@ -6,7 +6,7 @@ use PhpParser\Builder\Trait_;
 
 trait imageTrait
 {
-    function saveImage($image, $folder)
+    function saveImage($image,$folder)
     {
         $fileEx = $image->getClientOriginalExtension();
         $fileName = time() . '.' . $fileEx;

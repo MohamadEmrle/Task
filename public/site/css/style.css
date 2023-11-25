@@ -118,14 +118,6 @@ input[type="submit"] {
     background: transparent;
 }
 
-a, input, select, textarea, button, a:after, .btn:after, .owl-carousel-clients .item img, .hover-content, .fancybox-nav span {
-    transition: all 0.4s ease-in-out;
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition: all 0.4s ease-in-out;
-    -ms-transition: all 0.4s ease-in-out;
-    -o-transition: all 0.4s ease-in-out;
-
-}
 
 p.clearfix {
     margin-bottom: 0;
@@ -276,11 +268,6 @@ nav.navbar {
 *********** SLIDER ***********
 --------------------------------------*/
 
-#owl-demo .item img{
-    display: block;
-    min-width: 100%;
-    height: auto;
-}
 
 .owl-btn {
     display: inline-block;
@@ -391,14 +378,7 @@ hr {
 #servuces {
     color: #000;
 }
-.owl-carousel-clients .item {
-    padding: 0 15px;
 
-}
-
-.owl-carousel-clients .item img {
-    width: 100%;
-}
 
 .list-numbered {
     list-style-type: decimal;

@@ -11,7 +11,7 @@
 
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right text-align-left">
-                    <li class="active"><a href="{{ route('site.index') }}">الرئيسية</a></li>
+                    <li class="active"><a href="{{ route('site.dashboard') }}">الرئيسية</a></li>
                     <li><a href="{{ route('site.abouts') }}">من نحن</a></li>
                     <li><a href="{{ route('site.index') }}">خدماتنا</a></li>
                 </ul>

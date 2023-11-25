@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $categories = Category::all();
     return view('site.pages.index',compact('categories'));
-});
+})->name('site.dashboard');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

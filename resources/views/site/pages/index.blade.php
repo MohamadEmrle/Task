@@ -1,8 +1,4 @@
 @extends('site.layout.main')
-@section('site_content')
-    @foreach ($categories as $category )
-        <div class="item" style="background-size: cover;">
-            <img src="{{ asset('storage/images/categories/'.$category->image) }}">
-        </div>
-    @endforeach
+@section('site')
+    <h1 id="servuces" class="main-heading">الصفحة الرئيسية</h1>
 @endsection

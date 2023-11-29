@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Service\storeRequest;
-use App\Http\Requests\Service\updateRequest;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -40,7 +39,7 @@ class ServiceController extends Controller
     {
         $data = $request->validated();
         Service::create($data);
-        return redirect()->route('admin.service.create')->with(['store'=>'Store Service Successfully']);
+        return redirect()->route('service.create')->with(['store'=>'Store Service Successfully']);
     }
 
     /**
@@ -54,7 +53,7 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(string $id)
     {
         $record = Service::find($id);
         return response()->json($record);
@@ -63,14 +62,14 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateRequest $request)
+    public function update(Request $request, string $id)
     {
         $record = Service::where('id',$request->id)->first();
         $record->update([
-            'name'                  => $request->name ?? $record->name,
-            'description'           => $request->description ?? $record->description,
+            'name'          => $request->name ?? $record->name,
+            'description'   => $request->description ?? $record->description,
         ]);
-        return redirect()->route('admin.service.create')->with(['update'=>'Update Service Successfully']);
+        return redirect()->route('service.create')->with(['update'=>'Update Service Successfully']);
     }
 
     /**
@@ -78,8 +77,8 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        $categoryId = Service::find($id);
-        $categoryId->delete();
+        $serive = Service::find($id);
+        $serive->delete();
         return response()->json([
             'success' => true,
             'message' => 'Service deleted successfully.'

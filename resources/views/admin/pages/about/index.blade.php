@@ -65,7 +65,8 @@
                         @enderror
 
                         <div class="form-group">
-                            <button id="Identitie_update" class="btn btn-success" class="form-control" data-id="identitie_id">update</button>
+                            <button id="Identitie_update" class="btn btn-success" class="form-control"
+                                data-id="id">update</button>
                         </div>
                     </form>
                 </div>
@@ -89,7 +90,7 @@
             var table = $('#identities_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.identitie.create') }}",
+                ajax: "{{ route('about.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -123,7 +124,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.identitie.store') }}",
+                url: "{{ route('about.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -137,9 +138,9 @@
     </script>
     <script>
         $(document).on('click', '#identitie_edit', function(e) {
-            var identitieId = $(this).data('id');
+            var aboutId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/identitie/edit') }}/' + identitieId,
+                url: "{{ route('about.index') }}" + "/" + aboutId + "/edit",
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {
@@ -153,38 +154,46 @@
     <script>
         $(document).on('click', '#Identitie_update', function(e) {
             e.preventDefault();
-            var IdentitieId = $(this).data('id');
+            var aboutId = $(this).data('id');
             var form = document.getElementById('Identitie_form_edit');
             var formdata = new FormData(form);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-            type: 'post',
-            url: '{{ url('admin/identitie/update') }}',
-            data:formdata,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: (data) => {
-                $("#identities_table").DataTable().ajax.reload();
-            },
+                url: "{{ route('about.update', ['about' => ':id']) }}".replace(':id', aboutId),
+                type: 'PUT',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    $("#identities_table").DataTable().ajax.reload();
+                },
+            });
         });
-    });
     </script>
     <script>
         $(document).on('click', '#identitie_delete', function(e) {
-            var identitieId = $(this).data('id');
-            $.ajax({
-                url: '{{ url('admin/identitie/delete') }}/' + identitieId,
-                type: 'get',
-                success: function(response) {
-                    if (response.success) {
-                        $('#identities_table').DataTable().row($(this).closest('tr')).remove().draw();
-                        alert('Identity deleted successfully.');
-                    } else {
-                        alert('Error deleting Identity.');
-                    }
+            var id = $(this).data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-        });
+            $.ajax({
+                url: "{{ route('about.destroy', ['about' => ':id']) }}".replace(':id', id),
+                type: 'DELETE',
+                success: function() {
+                    $('#identities_table').DataTable().row($(this).closest('tr')).remove().draw();
+                },
+                error: function(xhr, status, error) {
+                    alert('Error deleting about. ' + xhr.responseText);
+                }
+                });
+            });
     </script>
 @endsection
 @endsection

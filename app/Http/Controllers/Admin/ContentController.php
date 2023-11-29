@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Content\storeRequest;
-use App\Http\Traits\imageTrait;
 use App\Models\Content;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\File;
 
 class ContentController extends Controller
 {
-    use imageTrait;
     /**
      * Display a listing of the resource.
      */
@@ -51,7 +49,7 @@ class ContentController extends Controller
         $data = $request->validated();
         $data['image'] = $this->saveImage($request->image,'storage/images/contents');
         Content::create($data);
-        return redirect()->route('admin.content.create')->with(['store'=>'Store Content Successfully']);
+        return redirect()->route('content.create')->with(['store'=>'Store Content Successfully']);
     }
 
     /**

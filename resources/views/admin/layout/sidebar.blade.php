@@ -12,11 +12,10 @@
             </div>
         </div>
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <li class="nav-item menu-open">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link active">
+                    <a href="{{ route('dashboard.index') }}" class="nav-link active">
                         <p>
                             Dashboard
                         </p>
@@ -27,7 +26,7 @@
 
                 <li class="nav-item">
 
-                    <a href="{{ route('admin.categories') }}" class="nav-link">
+                    <a href="{{ route('category.index') }}" class="nav-link">
 
                         <p>
                             Categories
@@ -35,37 +34,37 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.images') }}" class="nav-link">
+                    <a href="{{ route('image.index') }}" class="nav-link">
                         <p>
                             Images
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.services') }}" class="nav-link">
+                    <a href="{{ route('service.index') }}" class="nav-link">
                         <p>
                             Services
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.contents') }}" class="nav-link">
+                    <a href="{{ route('content.index') }}" class="nav-link">
                         <p>
                             Contents
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.customers') }}" class="nav-link">
+                    <a href="{{ route('customer.index') }}" class="nav-link">
                         <p>
                             Customers
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.identities') }}" class="nav-link">
+                    <a href="{{ route('about.index') }}" class="nav-link">
                         <p>
-                            Identities
+                            Abouts
                         </p>
                     </a>
                 </li>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\About;
 use App\Models\Customer;
 use App\Models\Identity;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class AbouttController extends Controller
      */
     public function index()
     {
-        $abouts = Identity::all();
+        $abouts = About::all();
         $customers = Customer::all();
         return view('site.pages.about',compact('abouts','customers'));
     }

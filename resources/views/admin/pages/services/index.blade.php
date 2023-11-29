@@ -105,7 +105,7 @@
             var table = $('#services_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.service.create') }}",
+                ajax: "{{ route('service.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -143,7 +143,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.service.store') }}",
+                url: "{{ route('service.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -159,7 +159,7 @@
         $(document).on('click', '#service_edit', function(e) {
             var serviceId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/service/edit') }}/' + serviceId,
+                url: "{{ route('service.index') }}"+"/"+serviceId+"/edit",
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {

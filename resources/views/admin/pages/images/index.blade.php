@@ -110,7 +110,7 @@
             var table = $('#images_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.image.index') }}",
+                ajax: "{{ route('image.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -149,7 +149,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.image.store') }}",
+                url: "{{ route('image.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -165,7 +165,7 @@
         $(document).on('click', '#image_edit', function(e) {
             var imageId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/image/edit') }}/' + imageId,
+                url: "{{ route('image.index') }}"+"/"+imageId+"/edit",
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {
@@ -199,9 +199,14 @@
     <script>
         $(document).on('click', '#image_delete', function(e) {
             var imageId = $(this).data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: '{{ url('admin/image/delete') }}/' + imageId,
-                type: 'get',
+                url: "{{ route('image.destroy', ['image' => ':id']) }}".replace(':id', imageId),
+                type: 'DELETE',
                 success: function(response) {
                     if (response.success) {
                         $('#images_table').DataTable().row($(this).closest('tr')).remove().draw();

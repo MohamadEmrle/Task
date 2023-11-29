@@ -113,7 +113,7 @@
             var table = $('#customers_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.customer.create') }}",
+                ajax: "{{ route('customer.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -157,7 +157,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.customer.store') }}",
+                url: "{{ route('customer.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -173,7 +173,7 @@
         $(document).on('click', '#customer_edit', function(e) {
             var customerId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/customer/edit') }}/' + customerId,
+                url: "{{ route('customer.index') }}"+"/"+customerId+"/edit",
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {

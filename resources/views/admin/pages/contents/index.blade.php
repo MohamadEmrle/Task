@@ -102,7 +102,7 @@
             var table = $('#cont_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.content.create') }}",
+                ajax: "{{ route('content.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -156,7 +156,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.content.store') }}",
+                url: "{{ route('content.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,

@@ -5,17 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Identitie\storeRequest;
 use App\Http\Requests\Identitie\updateRequest;
-use App\Models\Identity;
+use App\Models\About;
 use Illuminate\Http\Request;
 
-class IdentityController extends Controller
+class AboutController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admin.pages.identities.index');
+        return view('admin.pages.about.index');
     }
 
     /**
@@ -24,12 +24,12 @@ class IdentityController extends Controller
     public function create(Request $request)
     {
         if($request->ajax()) {
-            return datatables()->of(Identity::select('*'))
+            return datatables()->of(About::select('*'))
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
         }
-        return view('admin.pages.categories.index');
+        return view('admin.pages.about.index');
     }
 
     /**
@@ -38,8 +38,8 @@ class IdentityController extends Controller
     public function store(storeRequest $request)
     {
         $data = $request->validated();
-        Identity::create($data);
-        return redirect()->route('admin.identitie.create')->with(['store'=>'Store Identitie Successfully']);
+        About::create($data);
+        return redirect()->route('about.create')->with(['store'=>'Store About Successfully']);
     }
 
     /**
@@ -55,32 +55,34 @@ class IdentityController extends Controller
      */
     public function edit(string $id)
     {
-        $record = Identity::find($id);
+        $record = About::find($id);
         return response()->json($record);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateRequest $request)
+    public function update(updateRequest $request , $id)
     {
-        $record = Identity::where('id',$request->id)->first();
-        $record->update([
-            'description'  => $request->description ?? $record->description,
-        ]);
-        return redirect()->route('admin.identitie.create')->with(['update'=>'Update Identitie Successfully']);
+        $record = About::where('id', $request->id)->first();
+        if ($record) {
+            $record->update([
+                'description' => $request->description ?? $record->description,
+            ]);
+        }
+        return redirect()->back()->with(['update' => 'Update About Successfully']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $categoryId = Identity::find($id);
-        $categoryId->delete();
+        $about = About::findOrfail($id);
+        $about->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Identity deleted successfully.'
+            'message' => 'About deleted successfully.'
         ]);
     }
 }

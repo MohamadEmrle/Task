@@ -22,7 +22,7 @@
                                 <p>Categories</p>
                             </div>
 
-                            <a href="{{ route('admin.categories') }}" class="small-box-footer">View <i
+                            <a href="{{ route('category.index') }}" class="small-box-footer">View <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                                 <p>Images</p>
                             </div>
 
-                            <a href="{{ route('admin.images') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('image.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 <p>Services</p>
                             </div>
 
-                            <a href="{{ route('admin.services') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('service.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
                             </div>
-                            <a href="{{ route('admin.customers') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('customer.index') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>

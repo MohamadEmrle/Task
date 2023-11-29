@@ -1,4 +1,7 @@
 @extends('admin.layout.main')
+@section('style')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
     @if (Session::has('store'))
         <div class="row mr-2 ml-2">
@@ -21,6 +24,7 @@
                 <div class="modal-body">
                     <form action="" id="categor_form" method="" enctype="multipart/form-data">
                         @csrf
+
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
                             <input type="text" name="name" class="form-control" placeholder="Enter The Category Name">
@@ -115,7 +119,7 @@
             var table = $('#categories_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.category.index') }}",
+                ajax: "{{ route('category.create') }}",
                 dataType: 'json',
                 dataSrc: 'data',
                 serverSide: true,
@@ -142,14 +146,14 @@
                         render: function(data, type, row) {
                             return '<a id="category_edit" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-id="' +
                                 row.id +
-                                '">Edit</a> <a id="category_delete" class="btn btn-danger" data-id="' +
+                                '">Edit</a> <a id="category_delete" onclick="return confirm('Aur Shur In Delete?')"  class="btn btn-danger" data-id="' +
                                 row.id + '">Delete</a>';
 
                         }
                     }
                 ]
             })
-        })
+        });
     </script>
 
     <script>
@@ -159,7 +163,7 @@
             var formdata = new FormData(form);
             $.ajax({
                 type: 'post',
-                url: "{{ route('admin.category.store') }}",
+                url: "{{ route('category.store') }}",
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -175,7 +179,7 @@
         $(document).on('click', '#category_edit', function(e) {
             var categoryId = $(this).data('id');
             $.ajax({
-                url: '{{ url('admin/category/edit') }}/' + categoryId,
+                url: "{{ route('category.index') }}"+"/"+categoryId+"/edit",
                 type: 'get',
                 dataType: 'json',
                 success: function(data) {
@@ -196,7 +200,7 @@
             var formdata = new FormData(form);
             $.ajax({
             type: 'POST',
-            url: '{{ url('admin/category/update') }}',
+            url: "{{ url('admin/category/index') }}"+"/"+categoryId+"/update",
             data:formdata,
             processData: false,
             contentType: false,
@@ -209,20 +213,23 @@
     </script>
     <script>
         $(document).on('click', '#category_delete', function(e) {
-            var categoryId = $(this).data('id');
-            $.ajax({
-                url: '{{ url('admin/category/delete') }}/' + categoryId,
-                type: 'get',
-                success: function(response) {
-                    if (response.success) {
-                        $('#categories_table').DataTable().row($(this).closest('tr')).remove().draw();
-                        alert('Category deleted successfully.');
-                    } else {
-                        alert('Error deleting category.');
-                    }
+            var id = $(this).data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-        });
+            $.ajax({
+                url: "{{ route('category.destroy', ['category' => ':id']) }}".replace(':id', id),
+                type: 'DELETE',
+                success: function() {
+                    $('#categories_table').DataTable().row($(this).closest('tr')).remove().draw();
+                },
+                error: function(xhr, status, error) {
+                    alert('Error deleting about. ' + xhr.responseText);
+                }
+                });
+            });
     </script>
 @endsection
 @endsection

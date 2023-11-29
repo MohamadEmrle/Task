@@ -5,7 +5,7 @@
     <div class="row">
         @foreach ($categories as $category)
         <div class="col-xs-12 col-sm-6 col-md-4 no-padding">
-            <a href="{{ route('site.category.show',$category->id) }}" class="img-holder">
+            <a href="{{ route('categories.show',$category->id) }}" class="img-holder">
                 <img src="{{ asset('storage/images/categories/'.$category->image) }}" alt="...">
 
                 <div class="hover-content">

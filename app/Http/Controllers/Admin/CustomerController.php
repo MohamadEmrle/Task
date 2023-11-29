@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\storeRequest;
-use App\Http\Requests\Customer\updateRequest;
 use App\Http\Traits\imageTrait;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -47,7 +46,7 @@ class CustomerController extends Controller
         $data = $request->validated();
         $data['image'] = $this->saveImage($request->image,'storage/images/customers');
         Customer::create($data);
-        return redirect()->route('admin.customer.create')->with(['store'=>'Store Customer Successfully']);
+        return redirect()->route('customer.create')->with(['store'=>'Store Customer Successfully']);
     }
 
     /**
@@ -70,7 +69,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateRequest $request)
+    public function update(Request $request, string $id)
     {
         $record = Customer::where('id',$request->id)->first();
         $data = $request->validated();
@@ -93,12 +92,12 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        $categoryId = Customer::find($id);
-        $path = 'storage/images/customers/'.$categoryId->image;
+        $customer = Customer::find($id);
+        $path = 'storage/images/customers/'.$customer->image;
         if(File::exists($path)) {
             File::delete($path);
         }
-        $categoryId->delete();
+        $customer->delete();
         return response()->json([
             'success' => true,
             'message' => 'Customer deleted successfully.'

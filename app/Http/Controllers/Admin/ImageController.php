@@ -14,12 +14,19 @@ use Illuminate\Support\Facades\File;
 class ImageController extends Controller
 {
     use imageTrait;
-    public function images()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
         $categories = Category::all();
         return view('admin.pages.images.index',compact('categories'));
     }
-    public function index(Request $request)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
     {
         if($request->ajax()) {
             return datatables()->of(Image::whereHas('category')->get())
@@ -36,19 +43,39 @@ class ImageController extends Controller
         }
         return view('admin.pages.images.index');
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(storeRequest $request)
     {
         $data = $request->validated();
         $data['image'] = $this->saveImage($request->image,'storage/images/categories/'.$request->category_id);
         Image::create($data);
-        return redirect()->route('admin.image.index')->with(['store'=>'Store Image Successfully']);
+        return redirect()->route('image.index')->with(['store'=>'Store Image Successfully']);
     }
-    public function edit($id)
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
         $record = Image::find($id);
         return response()->json($record);
     }
-    public function update(updateRequest $request)
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(updateRequest $request, string $id)
     {
         $record = Image::whereHas('category')->where('id',$request->id)->first();
         $data = $request->user();
@@ -62,9 +89,13 @@ class ImageController extends Controller
             'category_id'         => $request->category_id ?? $record->category_id,
             'image'               => $data['image'] ?? $record->image,
         ]);
-        return redirect()->route('admin.image.index')->with(['update'=>'Update Image Successfully']);
+        return redirect()->route('image.index')->with(['update'=>'Update Image Successfully']);
     }
-    public function delete($id)
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
         $imageId = Image::find($id);
         $path = 'storage/images/categories/'.$imageId->category_id.'/'.$imageId->image;

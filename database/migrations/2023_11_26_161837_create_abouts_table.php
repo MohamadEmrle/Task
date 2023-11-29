@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('identities', function (Blueprint $table) {
+        Schema::create('abouts', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->autoIncrement();
             $table->string('description');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('identities');
+        Schema::dropIfExists('abouts');
     }
 };

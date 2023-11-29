@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\categoryDataTable;
-use App\DataTables\categoryDataTableEditor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\storeRequest;
 use App\Http\Requests\Category\updateRequest;
 use App\Http\Traits\imageTrait;
 use App\Models\Category;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
     use imageTrait;
-    public function categories()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
         $categories = Category::all();
         return view('admin.pages.categories.index',compact('categories'));
     }
-    public function index(Request $request)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
     {
         if($request->ajax()) {
             return datatables()->of(Category::select('*'))
@@ -38,22 +39,42 @@ class CategoryController extends Controller
         }
         return view('admin.pages.categories.index');
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(storeRequest $request)
     {
         $data = $request->validated();
         $data['image'] = $this->saveImage($request->image,'storage/images/categories');
         Category::create($data);
-        return redirect()->route('admin.category.index')->with(['store'=>'Store Category Successfully']);
+        return redirect()->route('Categories.index')->with(['store'=>'Store Category Successfully']);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
-        $record = Category::find($id);
+        $record = Category::findOrfail($id);
         return response()->json($record);
     }
-    public function update(updateRequest $request)
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(updateRequest $request, string $id)
     {
-        $data = $request->user();
-        $record = Category::where('id',$request->id)->first();
+        $data = $request->validated();
+        $record = Category::where('id',$id)->first();
         if(request()->hasFile('image')) {
             File::delete('storage/images/categories/'.$record->image);
         }
@@ -67,14 +88,18 @@ class CategoryController extends Controller
         ]);
         return redirect()->route('admin.category.index')->with(['update'=>'Update Category Successfully']);
     }
-    public function delete($id)
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
     {
-        $categoryId = Category::find($id);
-        $path = 'storage/images/categories/'.$categoryId->image;
+        $category = Category::find($id);
+        $path = 'storage/images/categories/'.$category->image;
         if(File::exists($path)) {
             File::delete($path);
         }
-        $categoryId->delete();
+        $category->delete();
         return response()->json([
             'success' => true,
             'message' => 'Category deleted successfully.'

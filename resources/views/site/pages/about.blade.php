@@ -14,9 +14,7 @@
             <div id="owl-demo-products" class="owl-carousel-clients">
                 @foreach ($customers as $customer )
                 <div id="item" class="item">
-                    <a class="fancybox-buttons" data-fancybox-group="button" href="images/logo-1.jpg">
-                        <img src="{{ asset('storage/images/customers/'.$customer->image) }}" alt="img">
-                    </a>
+                    <img src="{{ asset('storage/images/customers/'.$customer->image) }}" alt="img" width="200px">
                     <h2>{{ $customer->name }}</h2>
                     <h4>{{ $customer->email }}</h4>
                 </div>

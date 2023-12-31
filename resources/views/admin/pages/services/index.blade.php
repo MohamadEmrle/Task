@@ -61,6 +61,7 @@
                 <div class="modal-body" id="modal-body">
                     <form id="service_form_edit" action="" method="">
                         @csrf
+                        @method('PUT')
                         <input type="hidden" name="id" id="service_id" class="form-control">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
@@ -177,25 +178,35 @@
             var serviceeId = $(this).data('id');
             var form = document.getElementById('service_form_edit');
             var formdata = new FormData(form);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-            type: 'post',
-            url: '{{ url('admin/service/update') }}',
-            data:formdata,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: (data) => {
-                $("#services_table").DataTable().ajax.reload();
-            },
-        });
+                url: "{{ url('admin/service') }}/" + serviceeId, // Use correct route name
+                type: 'POST',
+                data:formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    $("#services_table").DataTable().ajax.reload();
+                },
+            });
     });
     </script>
     <script>
         $(document).on('click', '#service_delete', function(e) {
             var serviceId = $(this).data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: '{{ url('admin/service/delete') }}/' + serviceId,
-                type: 'get',
+                url: "{{ url('admin/service') }}/" + serviceId, // Use correct route name
+                type: 'DELETE',
                 success: function(response) {
                     if (response.success) {
                         $('#services_table').DataTable().row($(this).closest('tr')).remove().draw();

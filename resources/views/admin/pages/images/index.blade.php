@@ -64,7 +64,8 @@
                 <div class="modal-body">
                     <form action="" id="image_edit_form" method="" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="id" id="image_id" class="form-control">
+                        @method('PUT')
+                        <input type="hidden" name="id" id="image_id" class="form-control image_id">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Image</label>
                             <input type="file" name="image" id="image" class="form-control">
@@ -183,17 +184,22 @@
             var imageId = $(this).data('image_id');
             var form = document.getElementById('image_edit_form');
             var formdata = new FormData(form);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-            type: 'POST',
-            url: '{{ url('admin/image/update') }}',
-            data:formdata,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: (data) => {
-                $("#images_table").DataTable().ajax.reload();
-            },
-        });
+                url: "{{ url('admin/image') }}/" + imageId, // Use correct route name
+                type: 'POST',
+                data:formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    $("#images_table").DataTable().ajax.reload();
+                },
+            });
     });
     </script>
     <script>
@@ -205,7 +211,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('image.destroy', ['image' => ':id']) }}".replace(':id', imageId),
+                url: "{{ url('admin/image') }}/" + imageId,
                 type: 'DELETE',
                 success: function(response) {
                     if (response.success) {

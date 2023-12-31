@@ -68,7 +68,8 @@
                 <div class="modal-body" id="modal-body">
                     <form id="categor_form_edit" action="" method="">
                         @csrf
-                        <input type="hidden" name="id" id="category_id" class="form-control">
+                        @method('PUT')
+                        <input type="hidden" name="id" id="category_id" class="form-control category_id">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Name</label>
                             <input type="text" name="name" id="category_name" class="form-control"
@@ -93,7 +94,7 @@
                             <h4 class="alert alert-danger">{{ $message }}</h4>
                         @enderror
                         <div class="form-group">
-                            <button id="caegory_update" class="btn btn-success" class="form-control" data-id="category_id">update</button>
+                            <button id="caegory_update" class="btn btn-success" class="form-control">update</button>
                         </div>
                     </form>
                 </div>
@@ -142,13 +143,12 @@
                         }
                     },
                     {
-                        title: 'Action',
+                        title: 'action',
                         render: function(data, type, row) {
                             return '<a id="category_edit" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-id="' +
                                 row.id +
-                                '">Edit</a> <a id="category_delete" onclick="return confirm('Aur Shur In Delete?')"  class="btn btn-danger" data-id="' +
+                                '">Edit</a> <a id="category_delete" class="btn btn-danger" data-id="' +
                                 row.id + '">Delete</a>';
-
                         }
                     }
                 ]
@@ -195,20 +195,26 @@
     <script>
         $(document).on('click', '#caegory_update', function(e) {
             e.preventDefault();
-            var categoryId = $(this).data('category_id');
+            var id = $(".category_id").val();
+            console.log(id);
             var form = document.getElementById('categor_form_edit');
             var formdata = new FormData(form);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-            type: 'POST',
-            url: "{{ url('admin/category/index') }}"+"/"+categoryId+"/update",
-            data:formdata,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: (data) => {
-                $("#categories_table").DataTable().ajax.reload();
-            },
-        });
+                url: "{{ url('admin/category') }}/" + id, // Use correct route name
+                type: 'POST',
+                data:formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    $("#categories_table").DataTable().ajax.reload();
+                },
+            });
     });
     </script>
     <script>
@@ -220,7 +226,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('category.destroy', ['category' => ':id']) }}".replace(':id', id),
+                url: "{{ url('admin/category') }}/" + id,
                 type: 'DELETE',
                 success: function() {
                     $('#categories_table').DataTable().row($(this).closest('tr')).remove().draw();

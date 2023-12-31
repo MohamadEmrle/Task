@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Content\storeRequest;
+use App\Http\Traits\imageTrait;
 use App\Models\Content;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -11,9 +12,7 @@ use Illuminate\Support\Facades\File;
 
 class ContentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use imageTrait;
     public function index()
     {
         $services = Service::all();

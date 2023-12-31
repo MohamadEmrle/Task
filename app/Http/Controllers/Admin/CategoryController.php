@@ -28,7 +28,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         if($request->ajax()) {
-            return datatables()->of(Category::select('*'))
+            return datatables()->of(Category::all())
             ->addColumn('image', function($image) {
                 $imagePath = '../storage/images/categories/' . $image->image;
                 return $imagePath;
@@ -86,7 +86,7 @@ class CategoryController extends Controller
             'description'     => $request->description ?? $record->description,
             'image'           => $data['image'] ?? $record->image,
         ]);
-        return redirect()->route('admin.category.index')->with(['update'=>'Update Category Successfully']);
+        return redirect()->route('category.create')->with(['update'=>'Update Category Successfully']);
     }
 
     /**

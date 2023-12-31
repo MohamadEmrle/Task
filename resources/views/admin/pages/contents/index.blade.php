@@ -171,9 +171,14 @@
     <script>
         $(document).on('click', '#content_delete', function(e) {
             var contenteId = $(this).data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: '{{ url('admin/content/delete') }}/' + contenteId,
-                type: 'get',
+                url: "{{ url('admin/content') }}/" + contenteId,
+                type: 'DELETE',
                 success: function(response) {
                     if (response.success) {
                         $('#cont_table').DataTable().row($(this).closest('tr')).remove().draw();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\storeRequest;
+use App\Http\Requests\Customer\updateRequest;
 use App\Http\Traits\imageTrait;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -62,8 +63,7 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
-        $record = Customer::find($id);
-        return response()->json($record);
+
     }
 
     /**
@@ -71,20 +71,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $record = Customer::where('id',$request->id)->first();
-        $data = $request->validated();
-        if(request()->hasFile('image')) {
-            File::delete('storage/images/customers/'.$record->image);
-        }
-        if(isset($request->image)) {
-            $data['image'] = $this->saveImage($request->image,'storage/images/customers');
-        }
-        $record->update([
-            'name'       => $request->name ?? $record->name,
-            'email'      => $request->email ?? $record->email,
-            'image'      => $data['image'] ?? $record->image,
-        ]);
-        return redirect()->route('admin.customer.create')->with(['update'=>'Update Customer Successfully']);
+
     }
 
     /**

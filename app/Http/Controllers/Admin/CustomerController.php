@@ -63,15 +63,29 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
-
+        $record = Customer::find($id);
+        return response()->json($record);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(updateRequest $request, string $id)
     {
-
+        $record = Customer::where('id',$id)->first();
+        $data = $request->validated();
+        if(request()->hasFile('image')) {
+            File::delete('storage/images/customers/'.$record->image);
+        }
+        if(isset($request->image)) {
+            $data['image'] = $this->saveImage($request->image,'storage/images/customers');
+        }
+        $record->update([
+            'name'       => $request->name ?? $record->name,
+            'email'      => $request->email ?? $record->email,
+            'image'      => $data['image'] ?? $record->image,
+        ]);
+        return redirect()->route('customer.create')->with(['update'=>'Update Customer Successfully']);
     }
 
     /**

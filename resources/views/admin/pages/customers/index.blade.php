@@ -54,6 +54,50 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <form id="customer_form_edit" action="" method="">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="id" id="customer_id" class="form-control customer_id">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Name</label>
+                            <input type="text" name="name" id="customer_name" class="form-control" placeholder="Enter The Customer Name">
+                        </div>
+                        @error('name')
+                            <h4 class="alert alert-danger">{{ $message }}</h4>
+                        @enderror
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Email</label>
+                            <input type="email" name="email" id="customer_email" class="form-control" placeholder="Enter The Customer Email">
+                        </div>
+                        @error('email')
+                            <h4 class="alert alert-danger">{{ $message }}</h4>
+                        @enderror
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Image</label>
+                            <input type="file" id="customer_image" name="image" class="form-control">
+                        </div>
+                        @error('image')
+                            <h4 class="alert alert-danger">{{ $message }}</h4>
+                        @enderror
+                        <div class="form-group">
+                            <button id="customer_update" class="btn btn-success" class="form-control">update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <table id="customers_table" class="table table-bordered data-table">
         <thead>
             <tr>
@@ -98,7 +142,9 @@
                     {
                         title: 'action',
                         render: function(data, type, row) {
-                            return '<a id="customer_delete" class="btn btn-danger" data-id="' +
+                            return '<a id="customer_edit" class="btn btn-info" data-toggle="modal" data-target="#editModal" data-id="' +
+                                row.id +
+                                '">Edit</a> <a id="customer_delete" class="btn btn-danger" data-id="' +
                                 row.id + '">Delete</a>';
 
                         }
@@ -124,6 +170,56 @@
                     var oTable = $("#customers_table").DataTable().ajax.reload();
                     oTable.ajax.reload();
                 },
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '#customer_edit', function(e) {
+            var customerId = $(this).data('id');
+            $.ajax({
+                url: "{{ route('customer.index') }}"+"/"+customerId+"/edit",
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    $('#editModal').modal('show');
+                    $('#customer_id').val(data.id);
+                    $('#customer_name').val(data.name);
+                    $('#customer_email').val(data.email);
+                    $('#customer_image').val(data.image);
+                },
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '#customer_update', function(e) {
+            e.preventDefault();
+            var id = $(".customer_id").val();
+            console.log(id);
+
+            var form = document.getElementById('customer_form_edit');
+            var formdata = new FormData(form);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "{{ url('admin/customer') }}/" + id, // Use correct route name
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: (data) => {
+                    $("#customers_table").DataTable().ajax.reload();
+                },
+                fail: (jqXHR, textStatus, errorThrown) => {
+                    // Handle errors here
+                    console.error(textStatus, errorThrown);
+                    alert('An error occurred during the update.');
+                }
             });
         });
     </script>

@@ -54,7 +54,8 @@
                 <div class="modal-body" id="modal-body">
                     <form id="Identitie_form_edit" action="" method="">
                         @csrf
-                        <input type="hidden" name="id" id="identitie_id" class="form-control">
+                        @method('PUT')
+                        <input type="hidden" data-id="aboutId" id="aboutId" name="id" class="form-control about_id">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Description</label>
                             <textarea name="description" id="Identitie_description" class="form-control"
@@ -65,8 +66,7 @@
                         @enderror
 
                         <div class="form-group">
-                            <button id="Identitie_update" class="btn btn-success" class="form-control"
-                                data-id="id">update</button>
+                            <button id="Identitie_update" class="btn btn-success" class="form-control">update</button>
                         </div>
                     </form>
                 </div>
@@ -146,7 +146,7 @@
                 success: function(data) {
                     $('#editModale').modal('show');
                     $('#Identitie_description').val(data.description);
-                    $('#identitie_id').val(data.id);
+                    $('#aboutId').val(data.id);
                 },
             });
         });
@@ -154,17 +154,22 @@
     <script>
         $(document).on('click', '#Identitie_update', function(e) {
             e.preventDefault();
-            var aboutId = $(this).data('id');
+            // Assuming you have an element with the class 'about_id'
+            var id = $(".about_id").val();
+            console.log(id);
+
             var form = document.getElementById('Identitie_form_edit');
             var formdata = new FormData(form);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
-                url: "{{ route('about.update', ['about' => ':id']) }}".replace(':id', aboutId),
-                type: 'PUT',
+                url: "{{ url('admin/about') }}/" + id, // Use correct route name
+                type: 'POST',
                 data: formdata,
                 processData: false,
                 contentType: false,
@@ -172,19 +177,25 @@
                 success: (data) => {
                     $("#identities_table").DataTable().ajax.reload();
                 },
+                fail: (jqXHR, textStatus, errorThrown) => {
+                    // Handle errors here
+                    console.error(textStatus, errorThrown);
+                    alert('An error occurred during the update.');
+                }
             });
         });
     </script>
     <script>
         $(document).on('click', '#identitie_delete', function(e) {
             var id = $(this).data('id');
+            console.log(id)
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
             $.ajax({
-                url: "{{ route('about.destroy', ['about' => ':id']) }}".replace(':id', id),
+                url: "{{ url('admin/about') }}/" + id,
                 type: 'DELETE',
                 success: function() {
                     $('#identities_table').DataTable().row($(this).closest('tr')).remove().draw();

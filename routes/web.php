@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\IdentityController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\SiteController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;

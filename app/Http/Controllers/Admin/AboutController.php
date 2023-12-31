@@ -62,9 +62,9 @@ class AboutController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateRequest $request , $id)
+    public function update(updateRequest $request , string $id)
     {
-        $record = About::where('id', $request->id)->first();
+        $record = About::where('id', $id)->first();
         if ($record) {
             $record->update([
                 'description' => $request->description ?? $record->description,
